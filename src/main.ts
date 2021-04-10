@@ -27,26 +27,25 @@ async function run(): Promise<void> {
     } = pullRequestPayload
     const token = core.getInput('token')
 
-    core.info(`Configuring renovate`)
+    core.debug(`Configuring renovate`)
     addStream(createGithubActionsBunyanStream())
 
-    const config = await getRenovateConfig({token})
+    const config = await getRenovateConfig({...context.repo, token})
     const git = simpleGit(config.localDir)
-    await git.fetch()
 
-    core.info(`Checking out PR base sha ${baseSha}`)
+    core.debug(`Checking out PR base sha ${baseSha}`)
     await git.checkout(baseSha)
 
-    core.info(`Looking for all dependencies in base`)
+    core.debug(`Looking for all dependencies in base`)
     const baseDependencies = await extractAllDependencies(config)
 
-    core.info(`Fetching possible updates for all base ref dependencies`)
+    core.debug(`Fetching possible updates for all base ref dependencies`)
     await fetchUpdates(config, baseDependencies)
 
-    core.info(`Checking out PR head sha ${headSha}`)
+    core.debug(`Checking out PR head sha ${headSha}`)
     await git.checkout(headSha)
 
-    core.info(`Looking for all dependencies in head`)
+    core.debug(`Looking for all dependencies in head`)
     const headDependencies = await extractAllDependencies(config)
 
     const updatedDependencies = [

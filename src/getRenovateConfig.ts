@@ -5,9 +5,13 @@ import {globalInitialize} from 'renovate/dist/workers/global/initialize'
 import {initRepo} from 'renovate/dist/workers/repository/init'
 
 export async function getRenovateConfig({
-  token
+  token,
+  owner,
+  repo
 }: {
   token: string
+  owner: string
+  repo: string
 }): Promise<RenovateConfig> {
   const globalConfig = await parseConfigs(
     {
@@ -35,16 +39,15 @@ export async function getRenovateConfig({
   globalConfig.gitAuthor =
     'github-actions <41898282+github-actions[bot]@users.noreply.github.com>'
   globalConfig.username = 'github-actions[bot]'
+  // otherwise renovate will only be able to work with branch with `renovate/` prefix
+  globalConfig.branchPrefix = ''
 
   // this is necessary to get only one update from renovate, so we can just replace the latest version with the verion from the branch
   globalConfig.separateMajorMinor = false
 
   let config = await globalInitialize(globalConfig)
 
-  config = await getRepositoryConfig(
-    config,
-    'AurorNZ/report-updated-dependencies'
-  )
+  config = await getRepositoryConfig(config, `${owner}/${repo}`)
   await setUtilConfig(config)
 
   return await initRepo(config)
