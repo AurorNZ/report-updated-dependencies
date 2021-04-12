@@ -1,8 +1,7 @@
 import './setupEnvToOverrideDefaultRenovateLogger'
 import './setupLogger'
 import * as core from '@actions/core'
-import {context, getOctokit} from '@actions/github'
-import {PullRequestEvent} from '@octokit/webhooks-definitions/schema'
+import {getOctokit} from '@actions/github'
 import {extractAllDependencies} from 'renovate/dist/workers/repository/extract'
 import {fetchUpdates} from 'renovate/dist/workers/repository/process/fetch'
 import simpleGit from 'simple-git'
@@ -11,30 +10,17 @@ import {commentTitle, getPrCommentBody} from './getPrCommentBody'
 import {getRenovateConfig} from './getRenovateConfig'
 import {getUpdatedDependencies} from './getUpdatedDependencies'
 import {upsertPrComment} from './upsertPrComment'
+import {getRunContext} from './getRunContext'
 
 async function run(): Promise<void> {
   try {
-    if (context.eventName !== 'pull_request') {
-      throw new Error(
-        'The action can out run on pull_request workflow events. Please ensure your workflow is only triggered by pull_request events or run this action conditionally.'
-      )
-    }
-
-    const pullRequestPayload = context.payload as PullRequestEvent
-
-    const {
-      pull_request: {
-        number: pullRequestNumber,
-        base: {sha: baseSha},
-        head: {sha: headSha}
-      }
-    } = pullRequestPayload
+    const {baseSha, headSha, pullRequestNumber, repo} = getRunContext()
 
     const token = core.getInput('token')
 
     core.debug(`Configuring renovate`)
 
-    const config = await getRenovateConfig({...context.repo, token})
+    const config = await getRenovateConfig({...repo, token})
     const git = simpleGit(config.localDir)
 
     core.debug(`Checking out PR base sha ${baseSha}`)
@@ -63,6 +49,10 @@ async function run(): Promise<void> {
       return
     }
 
+    if (typeof pullRequestNumber !== 'number') {
+      return
+    }
+
     const updatedDependenciesWithChangelogs = await fetchChangelogs(
       config,
       updatedDependencies
@@ -73,7 +63,7 @@ async function run(): Promise<void> {
 
     await upsertPrComment(
       github,
-      context.repo,
+      repo,
       pullRequestNumber,
       commentTitle,
       commentBody
