@@ -5,6 +5,7 @@ import {getRepositoryConfig} from 'renovate/dist/workers/global'
 import {globalInitialize} from 'renovate/dist/workers/global/initialize'
 import path from 'path'
 import {initRepo} from 'renovate/dist/workers/repository/init'
+import simpleGit from 'simple-git'
 
 export async function getRenovateConfig({
   token,
@@ -14,7 +15,7 @@ export async function getRenovateConfig({
   token: string
   owner: string
   repo: string
-}): Promise<RenovateConfig> {
+}): Promise<{config: RenovateConfig; git: ReturnType<typeof simpleGit>}> {
   const globalConfig = await parseConfigs(
     {
       ...process.env,
@@ -41,8 +42,6 @@ export async function getRenovateConfig({
   globalConfig.gitAuthor =
     'github-actions <41898282+github-actions[bot]@users.noreply.github.com>'
   globalConfig.username = 'github-actions[bot]'
-  // otherwise renovate will only be able to work with branch with `renovate/` prefix
-  globalConfig.branchPrefix = ''
 
   // this is necessary to get only one update from renovate, so we can just replace the latest version with the verion from the branch
   globalConfig.separateMajorMinor = false
@@ -65,6 +64,15 @@ export async function getRenovateConfig({
     config.localDir = repositoryPath
   }
 
+  const git = simpleGit(config.localDir)
+
   await setUtilConfig(config)
-  return await initRepo(config)
+
+  // otherwise initRepo fails
+  await git.fetch(['--depth=1'])
+  await git.remote(['set-head', 'origin', '--auto'])
+
+  config = await initRepo(config)
+
+  return {config, git}
 }

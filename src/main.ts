@@ -4,7 +4,6 @@ import * as core from '@actions/core'
 import {getOctokit} from '@actions/github'
 import {extractAllDependencies} from 'renovate/dist/workers/repository/extract'
 import {fetchUpdates} from 'renovate/dist/workers/repository/process/fetch'
-import simpleGit from 'simple-git'
 import {fetchChangelogs} from './fetchChangelogs'
 import {commentTitle, getPrCommentBody} from './getPrCommentBody'
 import {getRenovateConfig} from './getRenovateConfig'
@@ -20,11 +19,10 @@ async function run(): Promise<void> {
 
     core.debug(`Configuring renovate`)
 
-    const config = await getRenovateConfig({...repo, token})
-    const git = simpleGit(config.localDir)
+    const {config, git} = await getRenovateConfig({...repo, token})
 
     core.debug(`Checking out PR base sha ${baseSha}`)
-    await git.raw(['fetch', 'origin', '--depth=1', baseSha])
+    await git.fetch(['origin', '--depth=1', baseSha])
     await git.checkout(baseSha)
 
     core.debug(`Looking for all dependencies in base`)
@@ -34,7 +32,7 @@ async function run(): Promise<void> {
     await fetchUpdates(config, baseDependencies)
 
     core.debug(`Checking out PR head sha ${headSha}`)
-    await git.raw(['fetch', 'origin', '--depth=1', headSha])
+    await git.fetch(['origin', '--depth=1', headSha])
     await git.checkout(headSha)
 
     core.debug(`Looking for all dependencies in head`)
