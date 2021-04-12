@@ -3,6 +3,8 @@ import {BunyanRecord} from 'renovate/dist/logger/utils'
 import * as core from '@actions/core'
 import {Writable} from 'stream'
 
+const messagesToIgnore = ['RE2 not usable, falling back to RegExp']
+
 class GithubActionsStream extends Writable {
   constructor() {
     super({
@@ -11,14 +13,22 @@ class GithubActionsStream extends Writable {
   }
 
   _write(rec: BunyanRecord, _: unknown, next: () => void): void {
+    if (messagesToIgnore.includes(rec.msg)) {
+      next()
+      return
+    }
+
+    const context = rec.module ? `[${rec.module}] ` : ''
+    const msg = context + rec.msg
+
     if (rec.level < INFO) {
-      core.debug(rec.msg)
+      core.debug(msg)
     } else if (rec.level < WARN) {
-      core.info(rec.msg)
+      core.info(msg)
     } else if (rec.level < ERROR) {
-      core.warning(rec.msg)
+      core.warning(msg)
     } else {
-      core.error(rec.msg)
+      core.error(msg)
     }
 
     next()
