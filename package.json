@@ -5,13 +5,12 @@
   "description": "Github Action to adds a new comment to PR with a summary of changes to dependencies in a PR including release notes and changelogs",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc && ncc build --source-map --license licenses.txt --external re2 --external dtrace-provider",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package"
+    "all": "npm run build && npm run format && npm run lint"
   },
   "repository": {
     "type": "git",

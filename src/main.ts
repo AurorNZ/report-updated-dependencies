@@ -1,7 +1,8 @@
+import './setupEnvToOverrideDefaultRenovateLogger'
+import './setupLogger'
 import * as core from '@actions/core'
 import {context, getOctokit} from '@actions/github'
 import {PullRequestEvent} from '@octokit/webhooks-definitions/schema'
-import {addStream} from 'renovate/dist/logger'
 import {extractAllDependencies} from 'renovate/dist/workers/repository/extract'
 import {fetchUpdates} from 'renovate/dist/workers/repository/process/fetch'
 import simpleGit from 'simple-git'
@@ -9,7 +10,6 @@ import {fetchChangelogs} from './fetchChangelogs'
 import {commentTitle, getPrCommentBody} from './getPrCommentBody'
 import {getRenovateConfig} from './getRenovateConfig'
 import {getUpdatedDependencies} from './getUpdatedDependencies'
-import {createGithubActionsBunyanStream} from './githubActionsBunyanStream'
 import {upsertPrComment} from './upsertPrComment'
 
 async function run(): Promise<void> {
@@ -33,7 +33,6 @@ async function run(): Promise<void> {
     const token = core.getInput('token')
 
     core.debug(`Configuring renovate`)
-    addStream(createGithubActionsBunyanStream())
 
     const config = await getRenovateConfig({...context.repo, token})
     const git = simpleGit(config.localDir)
@@ -80,7 +79,6 @@ async function run(): Promise<void> {
       commentBody
     )
   } catch (error) {
-    core.error(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
   }
 }
