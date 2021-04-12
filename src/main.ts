@@ -80,8 +80,7 @@ async function run(): Promise<void> {
       commentBody
     )
   } catch (error) {
-    core.debug(`Error message: ${error.message}`)
-    core.debug(`Stack: ${error.stack}`)
+    core.error(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
   }
 }
