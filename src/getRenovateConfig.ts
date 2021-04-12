@@ -1,7 +1,9 @@
 import {parseConfigs, RenovateConfig} from 'renovate/dist/config'
+import * as core from '@actions/core'
 import {setUtilConfig} from 'renovate/dist/util'
 import {getRepositoryConfig} from 'renovate/dist/workers/global'
 import {globalInitialize} from 'renovate/dist/workers/global/initialize'
+import path from 'path'
 import {initRepo} from 'renovate/dist/workers/repository/init'
 
 export async function getRenovateConfig({
@@ -50,5 +52,22 @@ export async function getRenovateConfig({
   config = await getRepositoryConfig(config, `${owner}/${repo}`)
   await setUtilConfig(config)
 
-  return await initRepo(config)
+  let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
+  core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`)
+
+  if (!githubWorkspacePath) {
+    return await initRepo(config)
+  } else {
+    githubWorkspacePath = path.resolve(githubWorkspacePath)
+    const repositoryPathInput = core.getInput('path') || '.'
+    const repositoryPath = path.resolve(
+      githubWorkspacePath,
+      repositoryPathInput
+    )
+
+    core.debug(`REPOSITORY_PATH = '${repositoryPath}'`)
+    config.localDir = repositoryPath
+
+    return config
+  }
 }

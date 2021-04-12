@@ -12,6 +12,8 @@ inputs:
       [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
     default: ${{ github.token }}
     required: true
+  path:
+    description: 'Relative path under $GITHUB_WORKSPACE to place the repository'
 runs:
   using: 'node12'
   main: 'dist/index.js'
