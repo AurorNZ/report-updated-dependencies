@@ -17,25 +17,25 @@ async function run(): Promise<void> {
 
     const token = core.getInput('token')
 
-    core.debug(`Configuring renovate`)
+    core.info(`Configuring renovate`)
 
     const {config, git} = await getRenovateConfig({...repo, token})
 
-    core.debug(`Checking out PR base sha ${baseSha}`)
+    core.info(`Checking out PR base sha ${baseSha}`)
     await git.fetch(['origin', '--depth=1', baseSha])
     await git.checkout(baseSha)
 
-    core.debug(`Looking for all dependencies in base`)
+    core.info(`Looking for all dependencies in base`)
     const baseDependencies = await extractAllDependencies(config)
 
-    core.debug(`Fetching possible updates for all base ref dependencies`)
+    core.info(`Fetching possible updates for all base ref dependencies`)
     await fetchUpdates(config, baseDependencies)
 
-    core.debug(`Checking out PR head sha ${headSha}`)
+    core.info(`Checking out PR head sha ${headSha}`)
     await git.fetch(['origin', '--depth=1', headSha])
     await git.checkout(headSha)
 
-    core.debug(`Looking for all dependencies in head`)
+    core.info(`Looking for all dependencies in head`)
     const headDependencies = await extractAllDependencies(config)
 
     const updatedDependencies = [
@@ -70,7 +70,7 @@ async function run(): Promise<void> {
       commentBody
     )
   } catch (error) {
-    core.debug(`Error stack: ${error.stack}`)
+    core.info(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
   }
 }
