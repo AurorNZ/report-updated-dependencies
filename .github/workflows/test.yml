@@ -17,6 +17,11 @@ jobs:
           npm run all
       - name: Verify no unstaged changes
         run: __test__/verify-no-unstaged-changes.sh
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
   pr-build-test:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
