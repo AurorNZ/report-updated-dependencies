@@ -12,15 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          npm install
+          npm ci
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building, the action can only run on pull_requests
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
+      - name: Verify no unstaged changes
+        run: __test__/verify-no-unstaged-changes.sh
   pr-build-test:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -30,9 +26,7 @@ jobs:
         with:
           node-version: '12'
       - run: |
-          npm install
+          npm ci
       - run: |
           npm run build
-      - run: |
-          npm run package
       - uses: ./
