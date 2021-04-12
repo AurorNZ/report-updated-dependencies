@@ -15,10 +15,24 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
+  test: # make sure the action works on a clean machine without building, the action can only run on pull_requests
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+  pr-build-test:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          milliseconds: 1000
+          node-version: '12'
+      - run: |
+          npm install
+      - run: |
+          npm run build
+      - run: |
+          npm run package
+      - uses: ./
