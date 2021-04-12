@@ -52,6 +52,7 @@ async function run(): Promise<void> {
     if (typeof pullRequestNumber !== 'number') {
       return
     }
+    core.info(`Fetching changelogs...`)
 
     const updatedDependenciesWithChangelogs = await fetchChangelogs(
       config,
