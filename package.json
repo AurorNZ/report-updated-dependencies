@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "report-updated-dependencies",
+  "version": "1.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Github Action to adds a new comment to PR with a summary of changes to dependencies in a PR including release notes and changelogs",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/AurorNZ/report-updated-dependencies.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "AurorNZ",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
