@@ -48,16 +48,12 @@ export async function getRenovateConfig({
   globalConfig.separateMajorMinor = false
 
   let config = await globalInitialize(globalConfig)
-
   config = await getRepositoryConfig(config, `${owner}/${repo}`)
-  await setUtilConfig(config)
 
   let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
   core.debug(`GITHUB_WORKSPACE = '${githubWorkspacePath}'`)
 
-  if (!githubWorkspacePath) {
-    return await initRepo(config)
-  } else {
+  if (githubWorkspacePath) {
     githubWorkspacePath = path.resolve(githubWorkspacePath)
     const repositoryPathInput = core.getInput('path') || '.'
     const repositoryPath = path.resolve(
@@ -67,7 +63,8 @@ export async function getRenovateConfig({
 
     core.debug(`REPOSITORY_PATH = '${repositoryPath}'`)
     config.localDir = repositoryPath
-
-    return config
   }
+
+  await setUtilConfig(config)
+  return await initRepo(config)
 }

@@ -24,6 +24,7 @@ async function run(): Promise<void> {
     const git = simpleGit(config.localDir)
 
     core.debug(`Checking out PR base sha ${baseSha}`)
+    await git.raw(['fetch', 'origin', '--depth=1', baseSha])
     await git.checkout(baseSha)
 
     core.debug(`Looking for all dependencies in base`)
@@ -33,6 +34,7 @@ async function run(): Promise<void> {
     await fetchUpdates(config, baseDependencies)
 
     core.debug(`Checking out PR head sha ${headSha}`)
+    await git.raw(['fetch', 'origin', '--depth=1', headSha])
     await git.checkout(headSha)
 
     core.debug(`Looking for all dependencies in head`)
@@ -69,6 +71,7 @@ async function run(): Promise<void> {
       commentBody
     )
   } catch (error) {
+    core.debug(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
   }
 }
