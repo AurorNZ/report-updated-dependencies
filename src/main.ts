@@ -13,7 +13,7 @@ import {getRunContext} from './getRunContext'
 
 async function run(): Promise<void> {
   try {
-    const {baseSha, headSha, pullRequestNumber, repo} = getRunContext()
+    const {baseRef, headRef, pullRequestNumber, repo} = getRunContext()
 
     const token = core.getInput('token')
 
@@ -21,9 +21,9 @@ async function run(): Promise<void> {
 
     const {config, git} = await getRenovateConfig({...repo, token})
 
-    core.info(`Checking out PR base sha ${baseSha}`)
-    await git.fetch(['origin', '--depth=1', baseSha])
-    await git.checkout(baseSha)
+    core.info(`Checking out PR base sha ${baseRef}`)
+    await git.fetch(['origin', '--depth=1', baseRef])
+    await git.checkout(baseRef)
 
     core.info(`Looking for all dependencies in base`)
     const baseDependencies = await extractAllDependencies(config)
@@ -31,9 +31,9 @@ async function run(): Promise<void> {
     core.info(`Fetching possible updates for all base ref dependencies`)
     await fetchUpdates(config, baseDependencies)
 
-    core.info(`Checking out PR head sha ${headSha}`)
-    await git.fetch(['origin', '--depth=1', headSha])
-    await git.checkout(headSha)
+    core.info(`Checking out PR head sha ${headRef}`)
+    await git.fetch(['origin', '--depth=1', headRef])
+    await git.checkout(headRef)
 
     core.info(`Looking for all dependencies in head`)
     const headDependencies = await extractAllDependencies(config)

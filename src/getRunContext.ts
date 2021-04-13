@@ -3,8 +3,8 @@ import {PullRequestEvent, PushEvent} from '@octokit/webhooks-definitions/schema'
 
 export interface RunContext {
   pullRequestNumber?: number
-  baseSha: string
-  headSha: string
+  baseRef: string
+  headRef: string
   repo: {
     owner: string
     repo: string
@@ -16,16 +16,16 @@ export function getRunContext(): RunContext {
   switch (context.eventName) {
     case 'pull_request': {
       const pullRequestPayload = context.payload as PullRequestEvent
+
       const {
         pull_request: {
           number: pullRequestNumber,
-          base: {sha: baseSha},
-          head: {sha: headSha}
+          base: {sha: baseSha}
         }
       } = pullRequestPayload
       return {
-        baseSha,
-        headSha,
+        baseRef: baseSha,
+        headRef: context.ref,
         pullRequestNumber,
         repo
       }
@@ -35,8 +35,8 @@ export function getRunContext(): RunContext {
       const pushPayload = context.payload as PushEvent
 
       return {
-        baseSha: pushPayload.before,
-        headSha: context.sha,
+        baseRef: pushPayload.before,
+        headRef: context.sha,
         repo
       }
     }
