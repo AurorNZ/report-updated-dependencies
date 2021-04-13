@@ -25,7 +25,7 @@ export function getRunContext(): RunContext {
       } = pullRequestPayload
       return {
         baseRef: baseSha,
-        headRef: context.ref,
+        headRef: context.sha,
         pullRequestNumber,
         repo
       }
