@@ -15,6 +15,11 @@ export async function upsertPrComment(
     issue_number: pullRequestNumber
   })
 
+  if (body.length >= 65536) {
+    const truncated = '\n\n\n...long comment body truncated...'
+    body = body.substr(0, 65536 - truncated.length) + truncated
+  }
+
   const [existingComment] = existingCommentsResponse.data.filter(x =>
     x.body?.startsWith(title)
   )

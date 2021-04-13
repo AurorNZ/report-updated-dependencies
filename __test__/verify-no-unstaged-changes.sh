@@ -1,9 +1,10 @@
 #!/bin/bash
 # from https://github.com/actions/checkout/blob/25a956c84d5dd820d28caab9f86b8d183aeeff3d/__test__/verify-no-unstaged-changes.sh
 
-git add .
+git add . --renormalize
 
-if [[ "$(git status --porcelain)" != "" ]]; then
+DIFF=$(git diff --staged --text --ignore-all-space)
+if [[ -z '$DIFF' ]]; then
     echo ----------------------------------------
     echo git status
     echo ----------------------------------------

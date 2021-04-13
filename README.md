@@ -16,6 +16,7 @@ jobs:
   report-updated-dependencies:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: AurorNZ/report-updated-dependencies@v1
 ```
 
@@ -35,6 +36,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: AurorNZ/report-updated-dependencies@v1
 ```
 

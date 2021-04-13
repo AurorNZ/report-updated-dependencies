@@ -4,7 +4,6 @@ import * as core from '@actions/core'
 import {getOctokit} from '@actions/github'
 import {extractAllDependencies} from 'renovate/dist/workers/repository/extract'
 import {fetchUpdates} from 'renovate/dist/workers/repository/process/fetch'
-import simpleGit from 'simple-git'
 import {fetchChangelogs} from './fetchChangelogs'
 import {commentTitle, getPrCommentBody} from './getPrCommentBody'
 import {getRenovateConfig} from './getRenovateConfig'
@@ -14,31 +13,32 @@ import {getRunContext} from './getRunContext'
 
 async function run(): Promise<void> {
   try {
-    const {baseSha, headSha, pullRequestNumber, repo} = getRunContext()
+    const {baseRef, headRef, pullRequestNumber, repo} = getRunContext()
 
     const token = core.getInput('token')
 
-    core.debug(`Configuring renovate`)
+    core.info(`Configuring renovate`)
 
-    const config = await getRenovateConfig({...repo, token})
-    const git = simpleGit(config.localDir)
+    const {config, git} = await getRenovateConfig({...repo, token})
 
-    core.debug(`Checking out PR base sha ${baseSha}`)
-    await git.checkout(baseSha)
+    core.info(`Checking out PR base sha ${baseRef}`)
+    await git.fetch(['origin', '--depth=1', baseRef])
+    await git.checkout(baseRef)
 
-    core.debug(`Looking for all dependencies in base`)
+    core.info(`Looking for all dependencies in base`)
     const baseDependencies = await extractAllDependencies(config)
 
-    core.debug(`Fetching possible updates for all base ref dependencies`)
+    core.info(`Fetching possible updates for all base ref dependencies`)
     await fetchUpdates(config, baseDependencies)
 
-    core.debug(`Checking out PR head sha ${headSha}`)
-    await git.checkout(headSha)
+    core.info(`Checking out PR head sha ${headRef}`)
+    await git.fetch(['origin', '--depth=1', headRef])
+    await git.checkout(headRef)
 
-    core.debug(`Looking for all dependencies in head`)
+    core.info(`Looking for all dependencies in head`)
     const headDependencies = await extractAllDependencies(config)
 
-    const updatedDependencies = [
+    let updatedDependencies = [
       ...getUpdatedDependencies(baseDependencies, headDependencies)
     ]
 
@@ -49,15 +49,18 @@ async function run(): Promise<void> {
       return
     }
 
+    const changelogs = core.getInput('changelogs') === 'true'
+
     if (typeof pullRequestNumber !== 'number') {
       return
     }
 
-    const updatedDependenciesWithChangelogs = await fetchChangelogs(
-      config,
-      updatedDependencies
-    )
-    const commentBody = getPrCommentBody(updatedDependenciesWithChangelogs)
+    if (changelogs) {
+      core.info(`Fetching changelogs...`)
+      updatedDependencies = await fetchChangelogs(config, updatedDependencies)
+    }
+
+    const commentBody = getPrCommentBody(updatedDependencies)
 
     const github = getOctokit(token)
 
@@ -69,6 +72,7 @@ async function run(): Promise<void> {
       commentBody
     )
   } catch (error) {
+    core.info(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
   }
 }

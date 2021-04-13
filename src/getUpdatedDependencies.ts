@@ -44,11 +44,16 @@ export function* getUpdatedDependencies(
             continue
           }
 
-          const [update] = baseDependency.updates // there should be a single update because we `fetchUpdates` on the base and use the rangeStrategy of 'update-lockfile'
           yield {
             manager: managerName,
             packageFile: basePackage,
-            update,
+            update: {
+              currentVersion:
+                baseDependency.lockedVersion || baseDependency.currentVersion,
+              newValue: headDependency.currentValue || '',
+              newVersion:
+                headDependency.lockedVersion || headDependency.currentValue
+            },
             dependency: baseDependency
           }
         }
