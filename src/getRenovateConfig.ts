@@ -69,8 +69,10 @@ export async function getRenovateConfig({
   await setUtilConfig(config)
 
   // otherwise initRepo fails
-  await git.fetch(['--depth=1'])
-  await git.remote(['set-head', 'origin', '--auto'])
+  if (githubWorkspacePath) {
+    await git.fetch(['--depth=1'])
+    await git.remote(['set-head', 'origin', '--auto'])
+  }
 
   config = await initRepo(config)
 
