@@ -8,7 +8,7 @@ import {fetchChangelogs} from './fetchChangelogs'
 import {commentTitle, getPrCommentBody} from './getPrCommentBody'
 import {getRenovateConfig} from './getRenovateConfig'
 import {getUpdatedDependencies} from './getUpdatedDependencies'
-import {upsertPrComment} from './upsertPrComment'
+import {ensurePrCommentRemoved, upsertPrComment} from './updatePrComment'
 import {getRunContext} from './getRunContext'
 
 async function run(): Promise<void> {
@@ -42,10 +42,22 @@ async function run(): Promise<void> {
       ...getUpdatedDependencies(baseDependencies, headDependencies)
     ]
 
+    const github = getOctokit(token)
+
     if (updatedDependencies.length > 0) {
       core.info(`Found ${updatedDependencies.length} updated dependencies`)
     } else {
       core.info(`No updated dependencies, exiting`)
+      if (typeof pullRequestNumber === 'number') {
+        await ensurePrCommentRemoved(
+          github,
+          repo,
+          pullRequestNumber,
+          commentTitle
+        )
+        return
+      }
+
       return
     }
 
@@ -61,8 +73,6 @@ async function run(): Promise<void> {
     }
 
     const commentBody = getPrCommentBody(updatedDependencies)
-
-    const github = getOctokit(token)
 
     await upsertPrComment(
       github,
