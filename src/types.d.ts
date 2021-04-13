@@ -10,8 +10,5 @@ export interface UpdatedDependency {
   packageFile: PackageFile
   dependency: PackageDependency<Record<string, unknown>>
   update: LookupUpdate
-}
-
-export interface UpdatedDependencyWithChangelog extends UpdatedDependency {
-  changelog: ChangeLogResult | null
+  changelog?: ChangeLogResult
 }

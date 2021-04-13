@@ -48,6 +48,8 @@ export function* getUpdatedDependencies(
             manager: managerName,
             packageFile: basePackage,
             update: {
+              currentVersion:
+                baseDependency.lockedVersion || baseDependency.currentVersion,
               newValue: headDependency.currentValue || '',
               newVersion:
                 headDependency.lockedVersion || headDependency.currentValue

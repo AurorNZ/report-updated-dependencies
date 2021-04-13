@@ -38,7 +38,7 @@ async function run(): Promise<void> {
     core.info(`Looking for all dependencies in head`)
     const headDependencies = await extractAllDependencies(config)
 
-    const updatedDependencies = [
+    let updatedDependencies = [
       ...getUpdatedDependencies(baseDependencies, headDependencies)
     ]
 
@@ -49,16 +49,18 @@ async function run(): Promise<void> {
       return
     }
 
+    const changelogs = core.getInput('changelogs') === 'true'
+
     if (typeof pullRequestNumber !== 'number') {
       return
     }
-    core.info(`Fetching changelogs...`)
 
-    const updatedDependenciesWithChangelogs = await fetchChangelogs(
-      config,
-      updatedDependencies
-    )
-    const commentBody = getPrCommentBody(updatedDependenciesWithChangelogs)
+    if (changelogs) {
+      core.info(`Fetching changelogs...`)
+      updatedDependencies = await fetchChangelogs(config, updatedDependencies)
+    }
+
+    const commentBody = getPrCommentBody(updatedDependencies)
 
     const github = getOctokit(token)
 
