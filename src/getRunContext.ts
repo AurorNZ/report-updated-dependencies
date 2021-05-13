@@ -18,13 +18,13 @@ export function getRunContext(): RunContext {
       const pullRequestPayload = context.payload as PullRequestEvent
 
       const {
-        pull_request: {
-          number: pullRequestNumber,
-          base: {sha: baseSha}
-        }
+        pull_request: {number: pullRequestNumber}
       } = pullRequestPayload
+
       return {
-        baseRef: baseSha,
+        // github actions usually checkout merge commits when PR is merge into the target branch
+        // `${context.sha}^` will get the first parent commit ßwhich will me the head of target branch for this PR
+        baseRef: `${context.sha}^`,
         headRef: context.sha,
         pullRequestNumber,
         repo

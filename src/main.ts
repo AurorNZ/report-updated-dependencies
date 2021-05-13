@@ -21,8 +21,19 @@ async function run(): Promise<void> {
 
     const {config, git} = await getRenovateConfig({...repo, token})
 
+    core.info(`Fetching ${headRef} from origin`)
+    await git.fetch(['origin', '--depth=2', headRef])
+
+    if (typeof pullRequestNumber === 'number') {
+      core.info(
+        `Not fetching baseRef ${baseRef} for PRs because the first parent will be used`
+      )
+    } else {
+      core.info(`Fetching ${baseRef} from origin`)
+      await git.fetch(['origin', '--depth=1', baseRef])
+    }
+
     core.info(`Checking out PR base sha ${baseRef}`)
-    await git.fetch(['origin', '--depth=1', baseRef])
     await git.checkout(baseRef)
 
     core.info(`Looking for all dependencies in base`)
@@ -32,7 +43,6 @@ async function run(): Promise<void> {
     await fetchUpdates(config, baseDependencies)
 
     core.info(`Checking out PR head sha ${headRef}`)
-    await git.fetch(['origin', '--depth=1', headRef])
     await git.checkout(headRef)
 
     core.info(`Looking for all dependencies in head`)
