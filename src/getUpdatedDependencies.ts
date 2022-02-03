@@ -28,11 +28,20 @@ export function* getUpdatedDependencies(
       }
 
       for (const baseDependency of basePackage.deps) {
-        const headDependency = headPackage.deps.find(
+        const matchingHeadDependencies = headPackage.deps.filter(
           x =>
             x.depName === baseDependency.depName &&
             x.depType === baseDependency.depType
         )
+
+        // skip if headPackage contains an exact match on name, type and version
+        if (
+          matchingHeadDependencies.some(x => isSameVersion(x, baseDependency))
+        ) {
+          continue
+        }
+
+        const headDependency = matchingHeadDependencies[0]
 
         if (!headDependency) {
           // the dependency seems to be removed from the head
@@ -49,10 +58,14 @@ export function* getUpdatedDependencies(
             packageFile: basePackage,
             update: {
               currentVersion:
-                baseDependency.lockedVersion || baseDependency.currentVersion,
+                baseDependency.lockedVersion ||
+                baseDependency.currentVersion ||
+                baseDependency.currentValue,
               newValue: headDependency.currentValue || '',
               newVersion:
-                headDependency.lockedVersion || headDependency.currentValue
+                headDependency.lockedVersion ||
+                headDependency.currentVersion ||
+                headDependency.currentValue
             },
             dependency: baseDependency
           }

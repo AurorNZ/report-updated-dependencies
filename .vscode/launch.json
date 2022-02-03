@@ -10,8 +10,9 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/main.ts",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
-      "outFiles": ["${workspaceFolder}/**/*.js"]
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only", "-r", "dotenv/config"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
