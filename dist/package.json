@@ -37,8 +37,4 @@
         "typescript": "3.1.5",
         "@types/node": "8.9.2"
     }
-
-,"_resolved": "https://registry.npmjs.org/azure-devops-node-api/-/azure-devops-node-api-10.2.1.tgz"
-,"_integrity": "sha512-XuSiUaYpk0tQpd9fD8qfRa5y1IdavupKNVmwxy0w/RhmxG2Wl8uAYnNJchUoWd3Rn9On0mYTCCZSn+UlYdYFSg=="
-,"_from": "azure-devops-node-api@10.2.1"
 }
