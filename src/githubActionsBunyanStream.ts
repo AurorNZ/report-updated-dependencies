@@ -1,5 +1,5 @@
 import {ERROR, INFO, Stream, WARN} from 'bunyan'
-import {BunyanRecord} from 'renovate/dist/logger/utils'
+import {BunyanRecord} from 'renovate/dist/logger/types'
 import * as core from '@actions/core'
 import {Writable} from 'stream'
 

@@ -40,7 +40,7 @@ async function run(): Promise<void> {
     const baseDependencies = await extractAllDependencies(config)
 
     core.info(`Fetching possible updates for all base ref dependencies`)
-    await fetchUpdates(config, baseDependencies)
+    await fetchUpdates(config, baseDependencies.packageFiles)
 
     core.info(`Checking out PR head sha ${headRef}`)
     await git.checkout(headRef)
@@ -49,7 +49,10 @@ async function run(): Promise<void> {
     const headDependencies = await extractAllDependencies(config)
 
     let updatedDependencies = [
-      ...getUpdatedDependencies(baseDependencies, headDependencies)
+      ...getUpdatedDependencies(
+        baseDependencies.packageFiles,
+        headDependencies.packageFiles
+      )
     ]
 
     const github = getOctokit(token)
@@ -91,7 +94,7 @@ async function run(): Promise<void> {
       commentTitle,
       commentBody
     )
-  } catch (error) {
+  } catch (error: any) {
     core.info(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
   }

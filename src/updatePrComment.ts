@@ -23,13 +23,13 @@ export async function upsertPrComment(
   }
 
   if (existingComment) {
-    await github.issues.updateComment({
+    await github.rest.issues.updateComment({
       ...repo,
       comment_id: existingComment.id,
       body
     })
   } else {
-    await github.issues.createComment({
+    await github.rest.issues.createComment({
       ...repo,
       issue_number: pullRequestNumber,
       body
@@ -54,7 +54,7 @@ export async function ensurePrCommentRemoved(
   )
 
   if (existingComment) {
-    await github.issues.deleteComment({
+    await github.rest.issues.deleteComment({
       ...repo,
       issue_number: pullRequestNumber,
       comment_id: existingComment.id
@@ -72,7 +72,7 @@ async function findExistingComment(
   pullRequestNumber: number,
   title: string
 ) {
-  const existingCommentsResponse = await github.issues.listComments({
+  const existingCommentsResponse = await github.rest.issues.listComments({
     ...repo,
     issue_number: pullRequestNumber
   })

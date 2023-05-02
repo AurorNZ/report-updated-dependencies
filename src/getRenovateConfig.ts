@@ -1,6 +1,6 @@
-import {parseConfigs, RenovateConfig} from 'renovate/dist/config'
+import {parseConfigs} from 'renovate/dist/workers/global/config/parse'
+import {RenovateConfig} from 'renovate/dist/config/types'
 import * as core from '@actions/core'
-import {setUtilConfig} from 'renovate/dist/util'
 import {getRepositoryConfig} from 'renovate/dist/workers/global'
 import {globalInitialize} from 'renovate/dist/workers/global/initialize'
 import path from 'path'
@@ -30,7 +30,7 @@ export async function getRenovateConfig({
       'false',
       // this prevents renovate from complaining that the onboarding branch does not exist
       '--require-config',
-      'false',
+      'ignored',
       '--token',
       token
     ]
@@ -65,8 +65,6 @@ export async function getRenovateConfig({
   }
 
   const git = simpleGit(config.localDir)
-
-  await setUtilConfig(config)
 
   // otherwise initRepo fails
   if (githubWorkspacePath) {
