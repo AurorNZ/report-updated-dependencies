@@ -5,7 +5,7 @@
   "description": "Github Action to adds a new comment to PR with a summary of changes to dependencies in a PR including release notes and changelogs",
   "main": "lib/main.js",
   "scripts": {
-    "build": "rm -rf dist lib && tsc && ncc build --source-map --license licenses.txt --external re2 --external dtrace-provider",
+    "build": "rm -rf dist lib && tsc && ncc build --license licenses.txt --external re2 --external dtrace-provider",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
