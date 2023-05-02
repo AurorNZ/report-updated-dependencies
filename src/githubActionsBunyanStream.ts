@@ -19,7 +19,7 @@ class GithubActionsStream extends Writable {
     }
 
     const context = rec.module ? `[${rec.module}] ` : ''
-    const msg = context + rec.msg
+    const msg = `${context}${rec.msg}`
 
     if (rec.level < INFO) {
       core.debug(msg)

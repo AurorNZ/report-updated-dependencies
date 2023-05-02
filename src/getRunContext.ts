@@ -1,5 +1,4 @@
 import {context} from '@actions/github'
-import {PullRequestEvent, PushEvent} from '@octokit/webhooks-definitions/schema'
 
 export interface RunContext {
   pullRequestNumber?: number
@@ -15,10 +14,10 @@ export function getRunContext(): RunContext {
   const repo = context.repo
   switch (context.eventName) {
     case 'pull_request': {
-      const pullRequestPayload = context.payload as PullRequestEvent
+      const pullRequestPayload = context.payload
 
       const {
-        pull_request: {number: pullRequestNumber}
+        pull_request: {number: pullRequestNumber} = {}
       } = pullRequestPayload
 
       return {
@@ -32,7 +31,7 @@ export function getRunContext(): RunContext {
     }
 
     case 'push': {
-      const pushPayload = context.payload as PushEvent
+      const pushPayload = context.payload
 
       return {
         baseRef: pushPayload.before,
