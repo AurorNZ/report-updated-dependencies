@@ -84,6 +84,7 @@ async function run(): Promise<void> {
 
     const commentBody = getPrCommentBody(updatedDependencies)
 
+    core.info(`Ensuring the PR comment is up to date`)
     await upsertPrComment(
       github,
       repo,

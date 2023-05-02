@@ -58,3 +58,16 @@ Note: We recommend using the `--license` option for ncc, which will create a lic
 Your action is now published! :rocket:
 
 See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
+
+
+## Debugging
+- Create a pull request, ideally with commits that update dependencies
+- Download the `github-context` artifact from Github Actions run for the PR. That artifact should have the JSON file with the context of the Github event.
+- Put the `event.json` file into the root of this repository
+- Add the following code to `.env` file
+  ```
+  GITHUB_EVENT_NAME=pull_request
+  GITHUB_EVENT_PATH=event.json
+  INPUT_TOKEN=<YOUR_GITHUB_TOKEN>
+  ```
+- Hit F5 in VSCode to start debugging

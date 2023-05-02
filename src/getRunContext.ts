@@ -16,15 +16,20 @@ export function getRunContext(): RunContext {
     case 'pull_request': {
       const pullRequestPayload = context.payload
 
-      const {
-        pull_request: {number: pullRequestNumber} = {}
-      } = pullRequestPayload
+      const {pull_request} = pullRequestPayload
+      if (!pull_request) {
+        throw new Error(
+          'Github event is malformed, expected pull_request context on pull_request event'
+        )
+      }
+
+      const {number: pullRequestNumber, merge_commit_sha} = pull_request
 
       return {
         // github actions usually checkout merge commits when PR is merge into the target branch
         // `${context.sha}^` will get the first parent commit ßwhich will me the head of target branch for this PR
-        baseRef: `${context.sha}^`,
-        headRef: context.sha,
+        baseRef: `${merge_commit_sha}^`,
+        headRef: merge_commit_sha,
         pullRequestNumber,
         repo
       }
@@ -35,7 +40,7 @@ export function getRunContext(): RunContext {
 
       return {
         baseRef: pushPayload.before,
-        headRef: context.sha,
+        headRef: pushPayload.after,
         repo
       }
     }
