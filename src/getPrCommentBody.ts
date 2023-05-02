@@ -1,7 +1,7 @@
 import {PackageDependency} from 'renovate/dist/manager/types'
 import {ChangeLogResult} from 'renovate/dist/workers/pr/changelog'
 import {sanitizeMarkdown} from 'renovate/dist/util/markdown'
-import {UpdatedDependency} from './types'
+import type {UpdatedDependency} from './types'
 
 export const commentTitle = '# Dependency updates summary'
 const footer =

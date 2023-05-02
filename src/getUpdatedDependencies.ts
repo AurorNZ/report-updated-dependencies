@@ -1,5 +1,5 @@
 import {PackageDependency, PackageFile} from 'renovate/dist/manager/types'
-import {UpdatedDependency} from './types'
+import type {UpdatedDependency} from './types'
 
 export function* getUpdatedDependencies(
   baseDependencies: Record<string, PackageFile[]>,

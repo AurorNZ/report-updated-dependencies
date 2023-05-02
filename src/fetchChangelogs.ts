@@ -1,6 +1,6 @@
 import {getManagerConfig, RenovateConfig} from 'renovate/dist/config'
 import {getChangeLogJSON} from 'renovate/dist/workers/pr/changelog'
-import {UpdatedDependency} from './types'
+import type {UpdatedDependency} from './types'
 
 export async function fetchChangelogs(
   config: RenovateConfig,
