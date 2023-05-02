@@ -1,11 +1,12 @@
-import {parseConfigs, RenovateConfig} from 'renovate/dist/config'
+import {parseConfigs} from 'renovate/dist/workers/global/config/parse'
+import {RenovateConfig} from 'renovate/dist/config/types'
 import * as core from '@actions/core'
-import {setUtilConfig} from 'renovate/dist/util'
+import {GlobalConfig} from 'renovate/dist/config/global'
 import {getRepositoryConfig} from 'renovate/dist/workers/global'
 import {globalInitialize} from 'renovate/dist/workers/global/initialize'
 import path from 'path'
 import {initRepo} from 'renovate/dist/workers/repository/init'
-import simpleGit from 'simple-git'
+import simpleGitLib from 'simple-git'
 
 export async function getRenovateConfig({
   token,
@@ -15,25 +16,20 @@ export async function getRenovateConfig({
   token: string
   owner: string
   repo: string
-}): Promise<{config: RenovateConfig; git: ReturnType<typeof simpleGit>}> {
+}): Promise<{config: RenovateConfig; git: ReturnType<typeof simpleGitLib>}> {
   const globalConfig = await parseConfigs(
     {
       ...process.env,
-      GITHUB_COM_TOKEN: token
-    },
-    [
+      GITHUB_COM_TOKEN: token,
       // this might prevent renovate from making changes to the repository
-      '--dry-run',
-      'true',
-      // this prevents renovate from creating the onboarding branch
-      '--onboarding',
-      'false',
+      RENOVATE_DRY_RUN: 'true',
       // this prevents renovate from complaining that the onboarding branch does not exist
-      '--require-config',
-      'false',
-      '--token',
-      token
-    ]
+      RENOVATE_REQUIRE_CONFIG: 'ignored',
+      // this prevents renovate from creating the onboarding branch
+      RENOVATE_ONBOARDING: 'false',
+      RENOVATE_TOKEN: token
+    },
+    []
   )
 
   // not sure if it's necessary, but it probably is, renovate uses this setting to use the locked version as the current version
@@ -64,9 +60,9 @@ export async function getRenovateConfig({
     config.localDir = repositoryPath
   }
 
-  const git = simpleGit(config.localDir)
+  const git = simpleGitLib(config.localDir)
 
-  await setUtilConfig(config)
+  GlobalConfig.set(config)
 
   // otherwise initRepo fails
   if (githubWorkspacePath) {

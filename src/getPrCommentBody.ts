@@ -1,5 +1,5 @@
-import {PackageDependency} from 'renovate/dist/manager/types'
-import {ChangeLogResult} from 'renovate/dist/workers/pr/changelog'
+import {PackageDependency} from 'renovate/dist/modules/manager/types'
+import {ChangeLogResult} from 'renovate/dist/workers/repository/update/pr/changelog'
 import {sanitizeMarkdown} from 'renovate/dist/util/markdown'
 import type {UpdatedDependency} from './types'
 
@@ -40,8 +40,8 @@ function getDependencyChangeContent({
 }: UpdatedDependency): {tableRow: string; changelog: string} {
   const dependencyLink = getDependencyNameLinked(dependency)
   const type = dependency.prettyDepType ?? dependency.depType
-  const from = update.displayFrom ?? update.currentVersion
-  const to = update.displayTo ?? update.newVersion
+  const from = dependency.currentVersion
+  const to = update.newVersion
 
   const change = `<code>${from}</code> → <code>${to}</code>`
 

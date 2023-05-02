@@ -11,6 +11,17 @@ import {getUpdatedDependencies} from './getUpdatedDependencies'
 import {ensurePrCommentRemoved, upsertPrComment} from './updatePrComment'
 import {getRunContext} from './getRunContext'
 
+// Github actions can only run on Node 16
+// but renovate requires Node 18
+// adding a polyfill for onle of the functions that is missing
+import structuredClone from '@ungap/structured-clone'
+// eslint-disable-next-line no-undef
+if (!('structuredClone' in globalThis)) {
+  // @ts-expect-error -- polyfilling :(
+  // eslint-disable-next-line no-undef
+  globalThis.structuredClone = structuredClone
+}
+
 async function run(): Promise<void> {
   try {
     const {baseRef, headRef, pullRequestNumber, repo} = getRunContext()
@@ -40,7 +51,7 @@ async function run(): Promise<void> {
     const baseDependencies = await extractAllDependencies(config)
 
     core.info(`Fetching possible updates for all base ref dependencies`)
-    await fetchUpdates(config, baseDependencies)
+    await fetchUpdates(config, baseDependencies.packageFiles)
 
     core.info(`Checking out PR head sha ${headRef}`)
     await git.checkout(headRef)
@@ -49,7 +60,10 @@ async function run(): Promise<void> {
     const headDependencies = await extractAllDependencies(config)
 
     let updatedDependencies = [
-      ...getUpdatedDependencies(baseDependencies, headDependencies)
+      ...getUpdatedDependencies(
+        baseDependencies.packageFiles,
+        headDependencies.packageFiles
+      )
     ]
 
     const github = getOctokit(token)

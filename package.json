@@ -26,7 +26,8 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.1.1",
-    "renovate": "24.110.0"
+    "@ungap/structured-clone": "^1.1.0",
+    "renovate": "35.66.3"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.8",
