@@ -1,5 +1,5 @@
 import {ERROR, INFO, Stream, WARN} from 'bunyan'
-import {BunyanRecord} from 'renovate/dist/logger/utils'
+import {BunyanRecord} from 'renovate/dist/logger/types'
 import * as core from '@actions/core'
 import {Writable} from 'stream'
 
@@ -19,7 +19,7 @@ class GithubActionsStream extends Writable {
     }
 
     const context = rec.module ? `[${rec.module}] ` : ''
-    const msg = context + rec.msg
+    const msg = `${context}${rec.msg}`
 
     if (rec.level < INFO) {
       core.debug(msg)

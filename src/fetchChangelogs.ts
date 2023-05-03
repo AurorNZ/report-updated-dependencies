@@ -1,6 +1,8 @@
-import {getManagerConfig, RenovateConfig} from 'renovate/dist/config'
-import {getChangeLogJSON} from 'renovate/dist/workers/pr/changelog'
-import {UpdatedDependency} from './types'
+import {getManagerConfig} from 'renovate/dist/config'
+import {RenovateConfig} from 'renovate/dist/config/types'
+import {getChangeLogJSON} from 'renovate/dist/workers/repository/update/pr/changelog'
+import type {UpdatedDependency} from './types'
+import type {BranchUpgradeConfig} from 'renovate/dist/workers/types'
 
 export async function fetchChangelogs(
   config: RenovateConfig,
@@ -14,7 +16,7 @@ export async function fetchChangelogs(
       ...getManagerConfig(config, manager),
       ...dependency,
       ...update
-    })
+    } as BranchUpgradeConfig)
 
     result.push({...updatedDependency, changelog: logJSON ?? undefined})
   }

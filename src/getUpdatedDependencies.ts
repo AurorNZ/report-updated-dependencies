@@ -1,5 +1,8 @@
-import {PackageDependency, PackageFile} from 'renovate/dist/manager/types'
-import {UpdatedDependency} from './types'
+import {
+  PackageDependency,
+  PackageFile
+} from 'renovate/dist/modules/manager/types'
+import type {UpdatedDependency} from './types'
 
 export function* getUpdatedDependencies(
   baseDependencies: Record<string, PackageFile[]>,
@@ -57,15 +60,12 @@ export function* getUpdatedDependencies(
             manager: managerName,
             packageFile: basePackage,
             update: {
-              currentVersion:
-                baseDependency.lockedVersion ||
-                baseDependency.currentVersion ||
-                baseDependency.currentValue,
               newValue: headDependency.currentValue || '',
               newVersion:
                 headDependency.lockedVersion ||
                 headDependency.currentVersion ||
-                headDependency.currentValue
+                headDependency.currentValue ||
+                undefined
             },
             dependency: baseDependency
           }

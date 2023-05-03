@@ -18,7 +18,7 @@ inputs:
     description: >
       Controls whether to fetch release notes from updated dependencies.
       Fetching dependencies can be quite slow on larger changesets
-    default: true
+    default: 'true'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
