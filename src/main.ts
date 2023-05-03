@@ -1,7 +1,7 @@
 import './setupEnvToOverrideDefaultRenovateLogger'
 import './setupLogger'
 import * as core from '@actions/core'
-import {getOctokit} from '@actions/github'
+import {context, getOctokit} from '@actions/github'
 import {extractAllDependencies} from 'renovate/dist/workers/repository/extract'
 import {fetchUpdates} from 'renovate/dist/workers/repository/process/fetch'
 import {fetchChangelogs} from './fetchChangelogs'
@@ -10,6 +10,7 @@ import {getRenovateConfig} from './getRenovateConfig'
 import {getUpdatedDependencies} from './getUpdatedDependencies'
 import {ensurePrCommentRemoved, upsertPrComment} from './updatePrComment'
 import {getRunContext} from './getRunContext'
+import fs from 'fs'
 
 // Github actions can only run on Node 16
 // but renovate requires Node 18
@@ -24,6 +25,14 @@ if (!('structuredClone' in globalThis)) {
 
 async function run(): Promise<void> {
   try {
+    if (process.env.TRY_USE_TEST_CONTEXT) {
+      useContextForTesting()
+    }
+
+    if (core.isDebug()) {
+      outputGithubContextForTesting()
+    }
+
     const {baseRef, headRef, pullRequestNumber, repo} = getRunContext()
 
     const token = core.getInput('token')
@@ -110,6 +119,27 @@ async function run(): Promise<void> {
   } catch (error: any) {
     core.info(`Error stack: ${error.stack}`)
     core.setFailed(error.message)
+  }
+}
+
+function outputGithubContextForTesting(): void {
+  core.debug('ReportUpdatedDependencies context that can be used for testing:')
+  core.debug(JSON.stringify(context, null, 2))
+}
+
+function useContextForTesting(): void {
+  try {
+    const content = fs.readFileSync('./test-context.json', {encoding: 'utf8'})
+    const json = JSON.parse(content)
+    for (const propName in context) {
+      if (Object.hasOwn(json, propName)) {
+        // @ts-expect-error typescript does not like it :)
+        context[propName] = json[propName]
+      }
+    }
+    core.info('Successfully load test-context.json')
+  } catch (ex) {
+    core.error('Failed to find or read test-context.json')
   }
 }
 

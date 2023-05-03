@@ -9,8 +9,17 @@
       "request": "launch",
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "TRY_USE_TEST_CONTEXT": "true"
+      },
       "program": "${workspaceFolder}/src/main.ts",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only", "-r", "dotenv/config"],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register/transpile-only",
+        "-r",
+        "dotenv/config"
+      ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     }

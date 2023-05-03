@@ -22,7 +22,7 @@ export async function getRenovateConfig({
       ...process.env,
       GITHUB_COM_TOKEN: token,
       // this might prevent renovate from making changes to the repository
-      RENOVATE_DRY_RUN: 'true',
+      RENOVATE_DRY_RUN: 'lookup',
       // this prevents renovate from complaining that the onboarding branch does not exist
       RENOVATE_REQUIRE_CONFIG: 'ignored',
       // this prevents renovate from creating the onboarding branch
@@ -43,6 +43,9 @@ export async function getRenovateConfig({
   globalConfig.separateMajorMinor = false
 
   let config = await globalInitialize(globalConfig)
+
+  GlobalConfig.set(config)
+
   config = await getRepositoryConfig(config, `${owner}/${repo}`)
 
   let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
@@ -60,9 +63,9 @@ export async function getRenovateConfig({
     config.localDir = repositoryPath
   }
 
-  const git = simpleGitLib(config.localDir)
-
   GlobalConfig.set(config)
+
+  const git = simpleGitLib(config.localDir)
 
   // otherwise initRepo fails
   if (githubWorkspacePath) {
