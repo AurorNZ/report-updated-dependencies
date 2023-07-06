@@ -60,14 +60,11 @@ export function* getUpdatedDependencies(
             manager: managerName,
             packageFile: basePackage,
             update: {
-              newValue:
-                headDependency.currentValue ||
-                headDependency.currentRawValue ||
-                '',
+              newValue: headDependency.currentValue || '',
               newVersion:
+                headDependency.lockedVersion ||
                 headDependency.currentVersion ||
                 headDependency.currentValue ||
-                headDependency.currentRawValue ||
                 undefined
             },
             dependency: baseDependency
@@ -82,9 +79,9 @@ function isSameVersion(
   a: PackageDependency<Record<string, unknown>>,
   b: PackageDependency<Record<string, unknown>>
 ): boolean {
-  if (a.currentValue && b.currentValue) {
-    return a.currentValue === b.currentValue
+  if (a.lockedVersion && b.lockedVersion) {
+    return a.lockedVersion === b.lockedVersion
   }
 
-  return a.currentRawValue === b.currentRawValue
+  return a.currentValue === b.currentValue
 }
