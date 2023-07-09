@@ -11,10 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - run: |
-          npm ci
+          pnpm i --frozen-lockfile
       - run: |
-          npm run all
+          pnpm run all
       - name: Verify no unstaged changes
         run: __test__/verify-no-unstaged-changes.sh
 
@@ -32,8 +35,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - run: |
-          npm ci
+          pnpm i --frozen-lockfile
       - run: |
-          npm run build
+          pnpm run build
       - uses: ./
