@@ -33,6 +33,7 @@
     "simple-git": "3.19.1"
   },
   "devDependencies": {
+    "@tsconfig/node16": "16.1.0",
     "@types/bunyan": "^1.8.8",
     "@types/node": "~16.18.38",
     "@types/ungap__structured-clone": "0.3.0",

@@ -18,7 +18,6 @@ import fs from 'fs'
 import structuredClone from '@ungap/structured-clone'
 // eslint-disable-next-line no-undef
 if (!('structuredClone' in globalThis)) {
-  // @ts-expect-error -- polyfilling :(
   // eslint-disable-next-line no-undef
   globalThis.structuredClone = structuredClone
 }
