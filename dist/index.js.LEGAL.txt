@@ -1,0 +1,172 @@
+Bundled license information:
+
+is-plain-object/dist/is-plain-object.js:
+  /*!
+   * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+   *
+   * Copyright (c) 2014-2017, Jon Schlinkert.
+   * Released under the MIT License.
+   */
+
+imurmurhash/imurmurhash.js:
+  /**
+   * @preserve
+   * JS Implementation of incremental MurmurHash3 (r150) (as of May 10, 2013)
+   *
+   * @author <a href="mailto:jensyt@gmail.com">Jens Taylor</a>
+   * @see http://github.com/homebrewing/brauhaus-diff
+   * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+   * @see http://github.com/garycourt/murmurhash-js
+   * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+   * @see http://sites.google.com/site/murmurhash/
+   */
+
+humanize-ms/index.js:
+  /*!
+   * humanize-ms - index.js
+   * Copyright(c) 2014 dead_horse <dead_horse@qq.com>
+   * MIT Licensed
+   */
+
+depd/index.js:
+  /*!
+   * depd
+   * Copyright(c) 2014-2018 Douglas Christopher Wilson
+   * MIT Licensed
+   */
+
+tslib/tslib.es6.js:
+  /*! *****************************************************************************
+  Copyright (c) Microsoft Corporation.
+  
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+  
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+  ***************************************************************************** */
+
+git-url-parse/lib/index.js:
+  /*!
+   * buildToken
+   * Builds OAuth token prefix (helper function)
+   *
+   * @name buildToken
+   * @function
+   * @param {GitUrl} obj The parsed Git url object.
+   * @return {String} token prefix
+   */
+
+changelog-filename-regex/index.js:
+  /*!
+   * changelog-filename-regex | ISC (c) Shinnosuke Watanabe
+   * https://github.com/shinnn/changelog-filename-regex
+  */
+
+he/he.js:
+  /*! https://mths.be/he v1.2.0 by @mathias | MIT license */
+
+sax/lib/sax.js:
+  /*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
+
+is-buffer/index.js:
+  /*!
+   * Determine if an object is a Buffer
+   *
+   * @author   Feross Aboukhadijeh <https://feross.org>
+   * @license  MIT
+   */
+
+repeat-string/index.js:
+  /*!
+   * repeat-string <https://github.com/jonschlinkert/repeat-string>
+   *
+   * Copyright (c) 2014-2015, Jon Schlinkert.
+   * Licensed under the MIT License.
+   */
+
+is-windows/index.js:
+  /*!
+   * is-windows <https://github.com/jonschlinkert/is-windows>
+   *
+   * Copyright © 2015-2018, Jon Schlinkert.
+   * Released under the MIT License.
+   */
+
+is-extglob/index.js:
+  /*!
+   * is-extglob <https://github.com/jonschlinkert/is-extglob>
+   *
+   * Copyright (c) 2014-2016, Jon Schlinkert.
+   * Licensed under the MIT License.
+   */
+
+is-glob/index.js:
+  /*!
+   * is-glob <https://github.com/jonschlinkert/is-glob>
+   *
+   * Copyright (c) 2014-2017, Jon Schlinkert.
+   * Released under the MIT License.
+   */
+
+is-number/index.js:
+  /*!
+   * is-number <https://github.com/jonschlinkert/is-number>
+   *
+   * Copyright (c) 2014-present, Jon Schlinkert.
+   * Released under the MIT License.
+   */
+
+to-regex-range/index.js:
+  /*!
+   * to-regex-range <https://github.com/micromatch/to-regex-range>
+   *
+   * Copyright (c) 2015-present, Jon Schlinkert.
+   * Released under the MIT License.
+   */
+
+fill-range/index.js:
+  /*!
+   * fill-range <https://github.com/jonschlinkert/fill-range>
+   *
+   * Copyright (c) 2014-present, Jon Schlinkert.
+   * Licensed under the MIT License.
+   */
+
+queue-microtask/index.js:
+  /*! queue-microtask. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+run-parallel/index.js:
+  /*! run-parallel. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+openpgp/dist/node/openpgp.min.js:
+  /*! OpenPGP.js v5.9.0 - 2023-05-15 - this is LGPL licensed code, see LICENSE/our website https://openpgpjs.org/ for more information. */
+  /*! *****************************************************************************
+  Copyright (c) Microsoft Corporation.
+  
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+  
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+  ***************************************************************************** */
+
+@cheap-glitch/mi-cron/index.min.js:
+  /*!
+   * mi-cron
+   *
+   * A microscopic parser for standard cron expressions.
+   *
+   * Copyright (c) 2020-present, cheap glitch
+   * This software is distributed under the ISC license
+   */

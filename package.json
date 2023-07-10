@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Github Action to adds a new comment to PR with a summary of changes to dependencies in a PR including release notes and changelogs",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf dist lib && tsc && ncc build --license licenses.txt --external re2 --external dtrace-provider",
+    "build": "rm -rf dist lib && node esbuild.config.mjs",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
@@ -37,12 +37,13 @@
     "@types/bunyan": "^1.8.8",
     "@types/node": "~16.18.38",
     "@types/ungap__structured-clone": "0.3.0",
-    "@vercel/ncc": "0.36.1",
     "dotenv": "^16.3.1",
+    "esbuild": "0.18.11",
+    "esbuild-plugin-copy": "2.1.1",
+    "esbuild-register": "3.4.2",
     "eslint": "^8.44.0",
     "eslint-plugin-github": "^4.8.0",
     "prettier": "2.8.8",
-    "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
   "pnpm": {
