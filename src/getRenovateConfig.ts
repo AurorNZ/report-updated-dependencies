@@ -6,6 +6,7 @@ import {getRepositoryConfig} from 'renovate/dist/workers/global'
 import {globalInitialize} from 'renovate/dist/workers/global/initialize'
 import path from 'path'
 import {initRepo} from 'renovate/dist/workers/repository/init'
+import {syncGit} from 'renovate/dist/util/git'
 import simpleGitLib from 'simple-git'
 
 export async function getRenovateConfig({
@@ -74,6 +75,10 @@ export async function getRenovateConfig({
   }
 
   config = await initRepo(config)
+
+  if (!githubWorkspacePath) {
+    await syncGit()
+  }
 
   return {config, git}
 }

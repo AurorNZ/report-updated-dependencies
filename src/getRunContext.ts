@@ -16,9 +16,8 @@ export function getRunContext(): RunContext {
     case 'pull_request': {
       const pullRequestPayload = context.payload
 
-      const {
-        pull_request: {number: pullRequestNumber} = {}
-      } = pullRequestPayload
+      const {pull_request: {number: pullRequestNumber} = {}} =
+        pullRequestPayload
 
       return {
         // github actions usually checkout merge commits when PR is merge into the target branch

@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "env": {
         "TRY_USE_TEST_CONTEXT": "true"
       },
-      "program": "${workspaceFolder}/src/main.ts",
+      "program": "${workspaceFolder}/src/index.ts",
       "runtimeArgs": [
         "--nolazy",
         "-r",
-        "ts-node/register/transpile-only",
+        "esbuild-register",
         "-r",
         "dotenv/config"
       ],
