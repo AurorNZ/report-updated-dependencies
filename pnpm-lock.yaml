@@ -8,6 +8,11 @@ overrides:
   fast-xml-parser@<4.2.4: '>=4.2.4'
   semver@<7.5.2: '>=7.5.2'
 
+patchedDependencies:
+  renovate@36.6.0:
+    hash: 43zpgzabjr64exdr2oxwb2cqsq
+    path: patches/renovate@36.6.0.patch
+
 dependencies:
   '@actions/core':
     specifier: ^1.10.0
@@ -23,7 +28,7 @@ dependencies:
     version: 1.8.15
   renovate:
     specifier: 36.6.0
-    version: 36.6.0(typanion@3.13.0)
+    version: 36.6.0(patch_hash=43zpgzabjr64exdr2oxwb2cqsq)(typanion@3.13.0)
   simple-git:
     specifier: 3.19.1
     version: 3.19.1
@@ -5935,7 +5940,7 @@ packages:
       - supports-color
     dev: false
 
-  /renovate@36.6.0(typanion@3.13.0):
+  /renovate@36.6.0(patch_hash=43zpgzabjr64exdr2oxwb2cqsq)(typanion@3.13.0):
     resolution: {integrity: sha512-c81SEADvSx161uYTqiSNPGuWwofknwBMIW9NpAGtqx3mpC0+C64gf2w8k7FQGnzwu1lnarRm1dOcSWU/bK36lQ==}
     engines: {node: ^18.12.0 || >=20.0.0, yarn: ^1.17.0}
     hasBin: true
@@ -6053,6 +6058,7 @@ packages:
       - supports-color
       - typanion
     dev: false
+    patched: true
 
   /repeat-string@1.6.1:
     resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}

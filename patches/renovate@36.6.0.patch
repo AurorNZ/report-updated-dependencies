@@ -1,0 +1,30 @@
+diff --git a/dist/modules/manager/npm/extract/locked-versions.js b/dist/modules/manager/npm/extract/locked-versions.js
+index f42759e03a3971d85d9799c038922311b82f9108..c2ea58f1046834cc220a0ae20e5109987a1863af 100644
+--- a/dist/modules/manager/npm/extract/locked-versions.js
++++ b/dist/modules/manager/npm/extract/locked-versions.js
+@@ -6,6 +6,7 @@ const is_1 = tslib_1.__importDefault(require("@sindresorhus/is"));
+ const semver_1 = tslib_1.__importDefault(require("semver"));
+ const logger_1 = require("../../../../logger");
+ const npm_1 = require("./npm");
++const path = require("path");
+ const pnpm_1 = require("./pnpm");
+ const yarn_1 = require("./yarn");
+ async function getLockedVersions(packageFiles) {
+@@ -116,13 +117,13 @@ async function getLockedVersions(packageFiles) {
+                 logger_1.logger.trace(`Retrieving/parsing ${pnpmShrinkwrap}`);
+                 lockFileCache[pnpmShrinkwrap] = await (0, pnpm_1.getPnpmLock)(pnpmShrinkwrap);
+             }
+-            const parentDir = packageFile.packageFile
+-                .replace(/\/package\.json$/, '')
+-                .replace(/^package\.json$/, '.');
++            const lockFileDir = path.dirname(pnpmShrinkwrap)
++            const packageDir = path.dirname(packageFile.packageFile);
++            const importerName = path.relative(lockFileDir, packageDir) || '.';
+             for (const dep of packageFile.deps) {
+                 const { depName, depType } = dep;
+                 // TODO: types (#7154)
+-                const lockedVersion = semver_1.default.valid(lockFileCache[pnpmShrinkwrap].lockedVersionsWithPath?.[parentDir]?.[depType]?.[depName]);
++                const lockedVersion = semver_1.default.valid(lockFileCache[pnpmShrinkwrap].lockedVersionsWithPath?.[importerName]?.[depType]?.[depName]);
+                 if (is_1.default.string(lockedVersion)) {
+                     dep.lockedVersion = lockedVersion;
+                 }
