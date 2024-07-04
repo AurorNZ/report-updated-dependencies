@@ -20,5 +20,5 @@ inputs:
       Fetching dependencies can be quite slow on larger changesets
     default: 'true'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'

@@ -1,4 +1,4 @@
-type Octokit = ReturnType<typeof import('@actions/github')['getOctokit']>
+type Octokit = ReturnType<(typeof import('@actions/github'))['getOctokit']>
 
 export async function upsertPrComment(
   github: Octokit,
