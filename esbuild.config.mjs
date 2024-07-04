@@ -24,10 +24,12 @@ await build({
   entryPoints: ['src/index.ts'],
   bundle: true,
   platform: 'node',
-  target: 'node16',
+  target: 'node20',
   external: ['re2', 'dtrace-provider', 'performance'],
   outdir: 'dist',
   minify: true,
+  // fix for https://github.com/microsoft/node-jsonc-parser/issues/57
+  mainFields: ['module', 'main'],
 
   plugins: [
     copy({
